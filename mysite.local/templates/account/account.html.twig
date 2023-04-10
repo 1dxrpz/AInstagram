@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block title %}AInstagram - home{% endblock %}
+
+{% block body %}
+<div class="container-sm">
+	<div class="container-sm d-flex flex-wrap justify-content-center">
+		<div class="avatar">
+			<img src="https://picsum.photos/500/500" alt="...">
+		</div>
+	</div>
+	<div class="container-sm d-flex flex-wrap justify-content-center">
+		<h2 class="nickname">@Name</h2>
+	</div>
+	<div class="container-sm d-flex flex-wrap justify-content-center">
+		<div class="description">Lorem ipsum dolor sit amet consectatur sic semper evello mortem tyranis</div>
+	</div>
+</div>
+
+<div class="container-sm d-flex flex-wrap justify-content-center">
+	<div class="content_wrapper d-flex flex-wrap justify-content-start" style="padding: 20px 0;">
+		<!-- CONTENT WRAPPER -->
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+	for (var i = 0; i < 10; i++)
+	$.ajax({
+		url: `/partials/post/${i * 20 + 200}/${i * 10 + 100}`,
+		method: 'get',
+		dataType: 'html',
+		success: (data) => {
+			var content_wrapper = document.querySelector(".content_wrapper");
+			content_wrapper.innerHTML += data;
+		}
+	})
+</script>
+{% endblock %}

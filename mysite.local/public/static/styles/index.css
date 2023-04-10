@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Josefin+Sans:wght@500;600;700&family=Jost:wght@600;700&display=swap');
+
+body {
+	margin: 0;
+	background: #eee !important;
+	height: 100vh;
+}
+:root {
+	font-weight: 500;
+}
+.dot {
+	position: absolute;
+	z-index: 2;
+	background-image: url("../images/pattern.png");
+	background-repeat: repeat;
+	background-attachment: scroll;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	opacity: .5;
+}
+.image {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 100% auto;
+}
+.logo {
+	font-family: 'Caveat', cursive;
+	//font-family: 'Josefin Sans', sans-serif;
+	//font-family: 'Jost', sans-serif;
+	font-weight: bold;
+}
+.card {
+	margin: 10px;
+}
+.wrapper {
+	border-radius: 10px;
+	padding: 20px;
+	background: #fff;
+	width: 35%;
+	margin-top: 50px;
+	margin-bottom: 50px;
+	border-color: #bbb !important;
+}
+.carousel-item {
+	height: 600px;
+	background: rebeccapurple;
+	color: #eee;
+}
+.avatar {
+	width: 150px;
+	height: 150px;
+	border-radius: 100%;
+	overflow: hidden;
+	position: relative;
+	box-shadow: 0 0 30px rgba(0, 0, 0, .25);
+	margin: 20px;
+	margin-top: 40px;
+}
+.avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.nickname {
+	font-weight: 600;
+}
+.description {
+	width: 300px;
+	text-align: center;
+	line-height: 20px;
+	margin-bottom: 30px;
+}
+
+@media screen and (max-width: 989px) {
+	.wrapper {
+		width: 60%;
+	}
+}
+@media screen and (max-width: 576px) {
+	.wrapper {
+		width: 100%;
+	}
+}
