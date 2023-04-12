@@ -4,17 +4,74 @@ namespace App\Security;
 
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
+#[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 180, unique: true)]
     private $name;
 
+    #[ORM\Column]
     private $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
-    private $password;
+    #[ORM\Column]
+    private ?string $password = null;
+
+    #[ORM\Column(length: 2048)]
+    public ?string $description = null;
+
+    #[ORM\Column(length: 64)]
+    public ?string $email = null;
+
+    #[ORM\Column(length: 255)]
+    public ?string $avatarid = null;
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getAvatarID(): ?string
+    {
+        return $this->avatarid;
+    }
+
+    public function setAvatarID(string $avatarid): self
+    {
+        $this->avatarid = $avatarid;
+
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getName(): ?string
     {
@@ -45,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles = array('ROLE_USER');
 
         return array_unique($roles);
     }

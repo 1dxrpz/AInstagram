@@ -20,8 +20,11 @@ class Post
     public ?string $Description = null;
 
     #[ORM\Column(length: 255)]
-    public ?string $ImageID = null;
-
+    public ?string $ImageURL = null;
+    
+    #[ORM\Column(length: 255)]
+    public ?string $Title = null;
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -51,14 +54,25 @@ class Post
         return $this;
     }
 
-    public function getImageID(): ?string
+    public function getImageURL(): ?string
     {
-        return $this->ImageID;
+        return $this->ImageURL;
     }
 
-    public function setImageID(string $ImageID): self
+    public function setImageURL(string $ImageURL): self
     {
-        $this->ImageID = $ImageID;
+        $this->ImageURL = $ImageURL;
+
+        return $this;
+    }
+    public function getTitle(): ?string
+    {
+        return $this->Title;
+    }
+
+    public function setTitle(string $Title): self
+    {
+        $this->Title = $Title;
 
         return $this;
     }
