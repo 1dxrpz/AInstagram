@@ -1,0 +1,1 @@
+.\symfony.exe server:start --port=8000 --no-tls

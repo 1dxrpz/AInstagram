@@ -6,23 +6,7 @@
 <div class="container-sm d-flex justify-content-center">
 	<div class="border wrapper">
 		<h1 class="text-center">Upload</h1>
-		<form>
-			<div class="mb-3">
-				<label for="formFile" class="form-label">Default file input example</label>
-				<input class="form-control" type="file" id="formFile">
-			</div>
-			<div class="mb-3">
-				<label for="exampleInputEmail1" class="form-label">Prompt</label>
-				<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-				<div id="emailHelp" class="form-text">Enter at least 1 word</div>
-			</div>
-			<div class="form-floating">
-				<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-				<label for="floatingTextarea">Description</label>
-			</div>
-			<br />
-			<button type="submit" class="btn btn-primary">Upload</button>
-		</form>
+		{{ form(form) }}
 	</div>
 </div>
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Repository\PostRepository;
+use App\Repository\UserPostsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,10 +40,7 @@ class PostsController extends AbstractController
 		$post = $postRepository->find($id);
 
 		if (!$post){
-			$data = [
-				'status' => 404,
-				'errors' => "post not found",
-			];
+			$data = ['message' => "POST_NOT_FOUND"];
 			return $this->response($data, 404);
 		}
 		return $this->response($post);
@@ -60,10 +58,7 @@ class PostsController extends AbstractController
 			$post = $postRepository->find($id);
 
 			if (!$post){
-				$data = [
-					'status' => 404,
-					'errors' => "Post not found",
-				];
+				$data = ['message' => "POST_NOT_FOUND",];
 				return $this->response($data, 404);
 			}
 
@@ -76,19 +71,14 @@ class PostsController extends AbstractController
 
 			$post->setPrompt($request->get('prompt'));
 			$post->setDescription($request->get('description'));
-			$post->setImageID($request->get('imageid'));
+			$post->setImageURL($request->get('imageurl'));
+			$post->setTitle($request->get('title'));
 			$entityManager->flush();
 
-			$data = [
-				'status' => 200,
-				'errors' => "Post updated successfully",
-			];
-			return $this->response($data);
+			$data = ['message' => "POST_UPDATE_SUCCESS"];
+			return $this->response($data, 200);
 		}catch (\Exception $e){
-			$data = [
-				'status' => 422,
-				'errors' => "Data no valid",
-			];
+			$data = ['message' => "INVALID_DATA"];
 			return $this->response($data, 422);
 		}
 	}
@@ -102,20 +92,14 @@ class PostsController extends AbstractController
 		$post = $postRepository->find($id);
 
 		if (!$post){
-			$data = [
-				'status' => 404,
-				'errors' => "Post not found",
-			];
+			$data = ['message' => "POST_NOT_FOUND"];
 			return $this->response($data, 404);
 		}
 
 		$entityManager->remove($post);
 		$entityManager->flush();
-		$data = [
-			'status' => 200,
-			'errors' => "Post deleted successfully",
-		];
-		return $this->response($data);
+		$data = ['message' => "POST_DELETE_SUCCESS"];
+		return $this->response($data, 200);
 	}
 	/**
 	* @param Request $request
@@ -137,21 +121,16 @@ class PostsController extends AbstractController
 			$post = new Post();
 			$post->setPrompt($request->get('prompt'));
 			$post->setDescription($request->get('description'));
-			$post->setImageID($request->get('imageid'));
+			$post->setImageURL($request->get('imageurl'));
+			$post->setTitle($request->get('title'));
 			$entityManager->persist($post);
 			$entityManager->flush();
 
-			$data = [
-				'status' => 200,
-				'success' => "Post added successfully",
-			];
-			return $this->response($data);
+			$data = ['message' => "POST_ADD_SUCCESS"];
+			return $this->response($data, 200);
 
 		}catch (\Exception $e){
-			$data = [
-				'status' => 422,
-				'errors' => "Data not valid",
-			];
+			$data = ['message' => "INVALID_DATA"];
 			return $this->response($data, 422);
 		}
 	}

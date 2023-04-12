@@ -36,10 +36,7 @@ class UsersController extends AbstractController
 		$user = $userRepository->find($id);
 
 		if (!$user){
-			$data = [
-				'status' => 404,
-				'errors' => "user not found",
-			];
+			$data = ['message' => "USER_NOT_FOUND"];
 			return $this->response($data, 404);
 		}
 		return $this->response($user);
@@ -57,19 +54,14 @@ class UsersController extends AbstractController
 			$user = $userRepository->find($id);
 
 			if (!$user){
-				$data = [
-					'status' => 404,
-					'errors' => "Post not found",
-				];
+				$data = ['message' => "USER_NOT_FOUND"];
 				return $this->response($data, 404);
 			}
 
 			$request = $this->transformJsonBody($request);
-			/*
-			if (!$request || !$request->get('name') || !$request->request->get('description')){
+			if (!$request || !$request->get('name')){
 				throw new \Exception();
 			}
-			*/
 
 			$user->setName($request->get('name'));
 			$user->setDescription($request->get('description'));
@@ -78,16 +70,10 @@ class UsersController extends AbstractController
 			$user->setAvatarID($request->get('avatarid'));
 			$entityManager->flush();
 
-			$data = [
-				'status' => 200,
-				'errors' => "Post updated successfully",
-			];
-			return $this->response($data);
+			$data = ['message' => "POST_UPDATE_SUCCESS"];
+			return $this->response($data, 200);
 		}catch (\Exception $e){
-			$data = [
-				'status' => 422,
-				'errors' => "Data no valid",
-			];
+			$data = ['message' => "INVALID_DATA"];
 			return $this->response($data, 422);
 		}
 	}
@@ -101,14 +87,14 @@ class UsersController extends AbstractController
 		$user = $userRepository->find($id);
 
 		if (!$user){
-			$data = ['message' => "User not found"];
+			$data = ['message' => "USER_NOT_FOUND"];
 			return $this->response($data, 404);
 		}
 
 		$entityManager->remove($user);
 		$entityManager->flush();
-		$data = ['message' => "User deleted"];
-		return $this->response($data);
+		$data = ['message' => "USER_DELETE_SUCCESS"];
+		return $this->response($data, 200);
 	}
 	/**
 	* @param Request $request
@@ -122,11 +108,11 @@ class UsersController extends AbstractController
 		try{
 			$request = $this->transformJsonBody($request);
 
-			$user = $userRepository->findOneBy(['Name' => $request->get('name')]);
+			$user = $userRepository->findOneBy(['name' => $request->get('name')]);
 
 			if ($user) {
-				$data = ['message' => "User already exists"];
-				return $this->response($data);
+				$data = ['message' => "USER_ALREADY_EXISTS"];
+				return $this->response($data, 409);
 			} else {
 				$user = new User();
 				$user->setName($request->get('name'));
@@ -136,11 +122,11 @@ class UsersController extends AbstractController
 				$user->setAvatarID($request->get('avatarid'));
 				$entityManager->persist($user);
 				$entityManager->flush();
-				$data = ['message' => "User created"];
-				return $this->response($data);
+				$data = ['message' => "USER_ADD_SUCCESS"];
+				return $this->response($data, 200);
 			}
 		} catch (\Exception $e){
-			$data = ['message' => "Invalid data"];
+			$data = ['message' => "INVALID_DATA"];
 			return $this->response($data, 422);
 		}
 	}
