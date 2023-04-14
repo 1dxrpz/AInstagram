@@ -105,11 +105,12 @@ class PostsController extends AbstractController
 	* @param Request $request
 	* @param EntityManagerInterface $entityManager
 	* @param postRepository $postRepository
+	* @param userPostsRepository $userPostsRepository
 	* @return JsonResponse
 	* @throws \Exception
 	* @Route("/posts", name="posts_add", methods={"POST"})
 	*/
-	public function addPost(Request $request, EntityManagerInterface $entityManager, postRepository $postRepository){
+	public function addPost(Request $request, EntityManagerInterface $entityManager, postRepository $postRepository, userPostsRepository $userPostsRepository){
 		try{
 			$request = $this->transformJsonBody($request);
 			/*

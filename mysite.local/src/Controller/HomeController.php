@@ -24,6 +24,7 @@ class HomeController extends AbstractController
     #[Route('/upload', name: 'upload')]
     public function upload(Request $request): Response
     {
+        
         $post = new Post();
 
         $form = $this->createForm(PostUploadFormType::class, $post);

@@ -5,7 +5,18 @@
 <div class="container-sm d-flex justify-content-center">
 	<div class="border wrapper">
 		<h1 class="text-center">Register</h1>
-			{{ form(form) }}
+			
+			{{ form_start(form) }}
+				{{ form_row(form.name) }}
+				{{ form_row(form.password) }}
+				{{ form_row(form.confirm_password) }}
+				{{ form_row(form.email) }}
+				<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+				<h4>{{ form_errors(form) }}</h4>
+				<br>
+				{{ form_row(form.submit, { 'label': 'Register' }) }}
+            	<a href="{{path('register')}}" class="btn btn-outline-primary">Login</a>
+			{{ form_end(form) }}
 	</div>
 </div>
 <br>

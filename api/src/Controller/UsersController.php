@@ -36,8 +36,7 @@ class UsersController extends AbstractController
 		$user = $userRepository->find($id);
 
 		if (!$user){
-			$data = ['message' => "USER_NOT_FOUND"];
-			return $this->response($data, 404);
+			return $this->response(404, "User not found");
 		}
 		return $this->response($user);
 	}
@@ -54,27 +53,25 @@ class UsersController extends AbstractController
 			$user = $userRepository->find($id);
 
 			if (!$user){
-				$data = ['message' => "USER_NOT_FOUND"];
-				return $this->response($data, 404);
+				return $this->response(404, "User not found");
 			}
 
 			$request = $this->transformJsonBody($request);
-			if (!$request || !$request->get('name')){
+			if (!$request || !$request->get("name")){
 				throw new \Exception();
 			}
 
-			$user->setName($request->get('name'));
-			$user->setDescription($request->get('description'));
-			$user->setPassword($request->get('password'));
-			$user->setEmail($request->get('email'));
-			$user->setAvatarID($request->get('avatarid'));
+			$user->setName($request->get("name"));
+			$user->setDescription($request->get("description"));
+			$user->setPassword($request->get("password"));
+			$user->setEmail($request->get("email"));
+			$user->setAvatarID($request->get("avatarid"));
+			$user->SetRoles(json_decode($request->get("roles")));
 			$entityManager->flush();
 
-			$data = ['message' => "POST_UPDATE_SUCCESS"];
-			return $this->response($data, 200);
+			return $this->response(200, "POST_UPDATE_SUCCESS");
 		}catch (\Exception $e){
-			$data = ['message' => "INVALID_DATA"];
-			return $this->response($data, 422);
+			return $this->response(422, "Invalid data");
 		}
 	}
 	/**
@@ -87,14 +84,12 @@ class UsersController extends AbstractController
 		$user = $userRepository->find($id);
 
 		if (!$user){
-			$data = ['message' => "USER_NOT_FOUND"];
-			return $this->response($data, 404);
+			return $this->response(404, "User not found");
 		}
 
 		$entityManager->remove($user);
 		$entityManager->flush();
-		$data = ['message' => "USER_DELETE_SUCCESS"];
-		return $this->response($data, 200);
+		return $this->response(200, "USER_DELETE_SUCCESS");
 	}
 	/**
 	* @param Request $request
@@ -108,31 +103,34 @@ class UsersController extends AbstractController
 		try{
 			$request = $this->transformJsonBody($request);
 
-			$user = $userRepository->findOneBy(['name' => $request->get('name')]);
+			$user = $userRepository->findOneBy(["name" => $request->get("name")]);
 
 			if ($user) {
-				$data = ['message' => "USER_ALREADY_EXISTS"];
-				return $this->response($data, 409);
+				return $this->response(409, "User already exists");
 			} else {
 				$user = new User();
-				$user->setName($request->get('name'));
-				$user->setDescription($request->get('description'));
-				$user->setPassword($request->get('password'));
-				$user->setEmail($request->get('email'));
-				$user->setAvatarID($request->get('avatarid'));
+				$user->setName($request->get("name"));
+				$user->setDescription($request->get("description"));
+				$user->setPassword($request->get("password"));
+				$user->setEmail($request->get("email"));
+				$user->setAvatarID($request->get("avatarid"));
+				$user->SetRoles(json_decode($request->get("roles")));
+				
 				$entityManager->persist($user);
 				$entityManager->flush();
-				$data = ['message' => "USER_ADD_SUCCESS"];
-				return $this->response($data, 200);
+				return $this->response(200, "USER_ADD_SUCCESS");
 			}
 		} catch (\Exception $e){
-			$data = ['message' => "INVALID_DATA"];
-			return $this->response($data, 422);
+			return $this->response(422, "Invalid data");
 		}
 	}
-	public function response($data, $status = 200, $headers = [])
+	public function response($status, $message)
 	{
-		return new JsonResponse($data, $status, $headers);
+		$data = [
+			"status" => $status,
+			"message" => $message
+		];
+		return new JsonResponse($data, 200, []);
 	}
 	protected function transformJsonBody(\Symfony\Component\HttpFoundation\Request $request)
 	{

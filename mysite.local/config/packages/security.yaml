@@ -19,7 +19,9 @@ security:
                 path: logout
                 # where to redirect after logout
                 # target: app_any_route
-
+        secured_area:
+            form_login:
+                enable_csrf: true
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -30,7 +32,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/upload, roles: ROLE_USER }
 
 when@test:
     security:

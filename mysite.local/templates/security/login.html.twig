@@ -5,30 +5,21 @@
     <div class="container-sm d-flex justify-content-center">
         <div class="border wrapper">
             <h1 class="text-center">Login</h1>
-
-            {% if app.user %}
+            {{ form_start(form) }}
                 <div class="mb-3">
-                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-                </div>
-            {% endif %}
-
-            <form method="post">
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Name</label>
-                    <input type="text" value="{{ last_username }}" name="name" id="inputName" class="form-control" autocomplete="username" required autofocus>
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    <label for="input_name" class="form-label">Name</label>
+                    <input type="text" value="{{ last_username }}" name="name" class="form-control" id="input_name" required autofocus>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+                    <label for="input_password" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="input_password" required>
                 </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1" name="_remember_me">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
+                <h4>{{ form_errors(form) }}</h4>
+                <br>
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
+                {{ form_row(form.submit, { 'label': 'Login' }) }}
+                <a href="{{path('register')}}" class="btn btn-outline-primary">Register</a>
+            {{ form_end(form) }}
         </div>
     </div>
     <br>
