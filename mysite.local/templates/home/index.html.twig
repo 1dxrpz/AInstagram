@@ -5,6 +5,11 @@
 
 <div id="homecarousel" class="carousel slide" data-ride="carousel">
 	<div class="carousel-inner">
+	  <div class="carousel-indicators">
+    		<button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+    		<button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+			<button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  		</div>
 		<div class="carousel-item active first_slide">
 			<div class="image" style="background-image: url({{asset('static/images/3.jpg')}});"></div>
 			<div class="dot"></div>
@@ -45,8 +50,15 @@
 	<h3>Random posts</h3>
 </div>
 <div class="container-sm d-flex flex-wrap justify-content-center">
-	<div class="content_wrapper d-flex flex-wrap justify-content-start" style="padding: 20px 0;">
+	<div class="content_wrapper d-flex flex-wrap justify-content-start">
 		<!-- CONTENT WRAPPER -->
+		<div class="card" style="width: 18rem; order: 1;">
+			<div class="card-body">
+				<h5 class="card-title">Wanna get more?</h5>
+				<p class="card-text">Eplore other images genereted by another users</p>
+				<a href="{{ path('explore') }}" class="btn btn-primary">Explore</a>
+			</div>
+		</div>
 	</div>
 </div>
 <br />

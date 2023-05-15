@@ -4,9 +4,42 @@ body {
 	margin: 0;
 	background: #eee !important;
 	height: 100vh;
+	margin-top: 65px !important;
+}
+#loader {
+	width: 100vw;
+	height: 100%;
+	position: fixed;
+	z-index: 9999;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #eee;
+	opacity: 1;
+	transition: .6s;
+}
+#loader .loader_wrapper {
+	animation: loader 1s infinite linear forwards;
+}
+@keyframes loader {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
 :root {
 	font-weight: 500;
+}
+.navbar {
+	position: fixed !important;
+	z-index: 10;
+	top: 0;
+	left: 0;
+	width: 100%;
 }
 .dot {
 	position: absolute;
@@ -29,9 +62,9 @@ body {
 	background-size: 100% auto;
 }
 .logo {
-	font-family: 'Caveat', cursive;
+	//font-family: 'Caveat', cursive;
 	//font-family: 'Josefin Sans', sans-serif;
-	//font-family: 'Jost', sans-serif;
+	font-family: 'Jost', sans-serif;
 	font-weight: bold;
 }
 .card {
@@ -45,6 +78,12 @@ body {
 	margin-top: 50px;
 	margin-bottom: 50px;
 	border-color: #bbb !important;
+}
+.content_wrapper {
+	width: 924px !important;
+}
+.content_wrapper:nth-child(1) {
+  
 }
 .carousel-item {
 	height: 600px;
@@ -76,6 +115,51 @@ body {
 	margin-bottom: 30px;
 }
 
+.generated_image_wrapper {
+	position: relative;
+}
+.generated_image {
+	width: 100%;
+	height: auto;
+}
+.generate_loading_text {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.generate_loading_text[data-hidden="true"] {
+	display: none;
+}
+.generate_loading_text[data-hidden="false"] {
+	display: flex;
+}
+.generate_loading {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.generate_loading[data-hidden="true"] {
+	display: none;
+}
+.generate_loading[data-hidden="false"] {
+	display: flex;
+}
+.generate_loading svg {
+	animation: loader 1s infinite forwards linear;
+}
+
 @media screen and (max-width: 989px) {
 	.wrapper {
 		width: 60%;
@@ -85,4 +169,22 @@ body {
 	.wrapper {
 		width: 100%;
 	}
+}
+
+.image_preview_wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+.image_preview_wrapper[data-hidden="false"] {
+	display: flex;
+}
+.image_preview_wrapper[data-hidden="true"] {
+	display: none;
+}
+.image_preview {
+	width: 100%;
+	position: relative;
+	height: auto;
 }

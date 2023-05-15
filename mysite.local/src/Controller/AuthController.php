@@ -50,7 +50,7 @@ class AuthController extends AbstractController
             return $this->redirectToRoute('account');
         }
 		$user = new User;
-		$form = $this->createForm(RegisterFormType::class, $user);
+		$form = $this->createForm(RegisterFormType::class, $user, ['validation_groups' => ['new', 'default']]);
 		$form->handleRequest($request);
 		$response = null;
 		if ($form->isSubmitted() && $form->isValid()) {

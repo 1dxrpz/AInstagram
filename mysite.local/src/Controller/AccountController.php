@@ -25,7 +25,11 @@ class AccountController extends AbstractController
     public function account(): Response
     {
         $user = $this->security->getUser();
+
+        
+
         return $this->render('account/account.html.twig', [
+            "id" => $user->getId(),
             "name" => $user->getName(),
             "description" => $user->getDescription()
         ]);

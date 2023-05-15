@@ -4,10 +4,24 @@
 {% block body %}
 
 <div class="container-sm d-flex justify-content-center">
-	<div class="border wrapper">
+	<div class="border wrapper" style="margin-right: 20px;">
 		<h1 class="text-center">Upload</h1>
-		{{ form(form) }}
+		{{ form_start(form) }}
+			{{ form_row(form.ImageURL, { 'label' : 'Image URL' }) }}
+			{{ form_row(form.Title) }}
+			{{ form_row(form.Prompt) }}
+			{{ form_row(form.Description) }}
+			<h4>{{ form_errors(form) }}</h4>
+			<br>
+			{{ form_row(form.Submit, { 'label': 'Upload' }) }}
+		{{ form_end(form) }}
+	</div>
+	<div class="border wrapper image_preview_wrapper" data-hidden="true">
+		<img class="image_preview" src="">
 	</div>
 </div>
 
+{% endblock %}
+{% block scripts %}
+	<script src="{{ asset('static/libs/js/upload.js') }}" type="module"></script>
 {% endblock %}

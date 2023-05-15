@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% block title %}AInstagram - home{% endblock %}
+
+{% block body %}
+<br/>
+<div class="container-sm">
+	<div class="container-sm d-flex justify-content-center">
+		<div class="border wrapper" style="margin-right: 20px; min-height: 500px;">
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="basic-addon1">Prompt</span>
+				<textarea type="text" class="form-control generate_prompt" placeholder="Enter at least 2 words" aria-describedby="basic-addon1"></textarea>
+			</div>
+			<select class="form-select form-select-sm generate_model" aria-label=".form-select-sm example">
+				<option selected value="stabilityai/stable-diffusion-2-1">stabilityai/stable-diffusion-2-1</option>
+				<option value="stabilityai/stable-diffusion-2">stabilityai/stable-diffusion-2</option>
+				<option value="runwayml/stable-diffusion-v1-5">runwayml/stable-diffusion-v1-5</option>
+				<option value="hakurei/waifu-diffusion">hakurei/waifu-diffusion</option>
+				<option value="dreamlike-art/dreamlike-diffusion-1.0">dreamlike-art/dreamlike-diffusion-1.0</option>
+				<option value="DucHaiten/DucHaitenAIart">DucHaiten/DucHaitenAIart</option>
+			</select>
+			<br/>
+			<button type="button" class="btn btn-primary generate_button">Generate</button>
+			<button type="button" class="btn btn-outline-primary download_button" disabled="">Download</button>
+		</div>
+		<div class="border wrapper generated_image_wrapper">
+			<img class="generated_image" alt="" />
+			<h1 class="generate_loading_text" data-hidden="false">
+				Here's your generated image
+			</h1>
+			<div class="generate_loading" data-hidden="true">
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="297px" height="297px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="display:block;" >
+	                <circle cx="50" cy="50" fill="none" stroke="#007bff" stroke-width="1" r="18" stroke-dasharray="84.82300164692441 30.274333882308138" transform="matrix(1,0,0,1,0,0)" ></circle>
+	            </svg>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block scripts %}
+	<script src="{{ asset('static/libs/js/generate.js') }}" type="module"></script>
+{% endblock %}

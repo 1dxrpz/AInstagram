@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\UserPosts;
 use App\Repository\PostRepository;
 use App\Repository\UserPostsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
 * Class PostsController
 * @package App\Controller
-* @Route("/api", name="posts_api")
+* @Route("/api", name="posts")
 */
 class PostsController extends AbstractController
 {
@@ -26,8 +27,6 @@ class PostsController extends AbstractController
 	public function getPosts(postRepository $postRepository){
 		$data = $postRepository->findAll();
 		$posts = $data;
-		//var_dump($posts);
-		//die;
 		return $this->response($data);
 	}
 	/**
@@ -101,16 +100,16 @@ class PostsController extends AbstractController
 		$data = ['message' => "POST_DELETE_SUCCESS"];
 		return $this->response($data, 200);
 	}
+
 	/**
 	* @param Request $request
 	* @param EntityManagerInterface $entityManager
 	* @param postRepository $postRepository
-	* @param userPostsRepository $userPostsRepository
 	* @return JsonResponse
 	* @throws \Exception
 	* @Route("/posts", name="posts_add", methods={"POST"})
 	*/
-	public function addPost(Request $request, EntityManagerInterface $entityManager, postRepository $postRepository, userPostsRepository $userPostsRepository){
+	public function addPost(Request $request, EntityManagerInterface $entityManager, postRepository $postRepository){
 		try{
 			$request = $this->transformJsonBody($request);
 			/*
@@ -127,7 +126,10 @@ class PostsController extends AbstractController
 			$entityManager->persist($post);
 			$entityManager->flush();
 
-			$data = ['message' => "POST_ADD_SUCCESS"];
+			$data = [
+				'data' => $post,
+				'message' => "POST_ADD_SUCCESS"
+			];
 			return $this->response($data, 200);
 
 		}catch (\Exception $e){

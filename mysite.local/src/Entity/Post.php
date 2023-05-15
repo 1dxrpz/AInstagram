@@ -15,6 +15,7 @@ class Post
 
     #[ORM\Column(length: 2048)]
     #[Assert\NotBlank]
+    #[Assert\Length(min: 6)]
     public ?string $Prompt = null;
 
     #[ORM\Column(length: 2048, nullable: true)]
