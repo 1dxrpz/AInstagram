@@ -28,7 +28,9 @@
                 </div>
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <button type="submit" class="btn btn-primary">Login</button>
+                <p>Dont have account? <a class="link-underline-dark link-opacity-50-hover link-offset-3" href="{{path('register')}}">Register</a></p>
             </form>
+            <li>{{ error.message }}</li>
         </div>
     </div>
     <br>

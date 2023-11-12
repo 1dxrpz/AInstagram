@@ -8,6 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
 {
+    public function __construct(
+        string $Prompt, 
+        string $Description, 
+        string $ImageURL, 
+        string $Title)
+    {
+        $this->setPrompt($Prompt);
+        $this->setDescription($Description);
+        $this->setImageURL($ImageURL);
+        $this->setTitle($Title);
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

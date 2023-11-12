@@ -5,25 +5,52 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use App\Entity\Post;
 use App\Form\PostUploadFormType;
 
 class HomeController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+       $this->security = $security;
+    }
+
     #[Route('/', name: 'index')]
     public function index(): Response
     {
         return $this->render('home/index.html.twig', []);
     }
+    
     #[Route('/explore', name: 'explore')]
     public function explore(): Response
     {
         return $this->render('home/explore.html.twig', []);
     }
+    
+    #[Route('/generate', name: 'generate')]
+    public function generate(): Response
+    {
+        $user = $this->security->getUser();
+        if ($user == null) {
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render('home/generate.html.twig', []);
+    }
+
     #[Route('/upload', name: 'upload')]
     public function upload(Request $request): Response
     {
+        $user = $this->security->getUser();
+        if ($user == null) {
+            return $this->redirectToRoute('login');
+        }
+
         $post = new Post();
 
         $form = $this->createForm(PostUploadFormType::class, $post);
@@ -34,7 +61,8 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $client = new \GuzzleHttp\Client();
-                $response = $client->post($this->getParameter('api.baseurl') . '/posts', [
+                $userId = $user->getId();
+                $response = $client->post($this->getParameter('api.baseurl') . '/posts/' . $userId, [
                     'headers' => [
                         'Content-Type' => 'application/json',
                     ],

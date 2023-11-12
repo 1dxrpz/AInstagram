@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\UserPosts;
 use App\Repository\PostRepository;
 use App\Repository\UserPostsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +19,17 @@ use Symfony\Component\Routing\Annotation\Route;
 */
 class PostsController extends AbstractController
 {
+	/**
+	* @param userPostsRepository $userPostsRepository
+	* @param $id
+	* @return JsonResponse
+	* @Route("/posts/user/{id}", name="posts_getbyuser", methods={"GET"})
+	*/
+	public function getPostsByUser(userPostsRepository $userPostsRepository, $id){
+		$data = $userPostsRepository->findByUserId($id);
+		return $this->response($data);
+	}
+
 	/**
 	* @param postRepository $postRepository
 	* @return JsonResponse
@@ -103,13 +115,21 @@ class PostsController extends AbstractController
 	}
 	/**
 	* @param Request $request
+	* @param $id
 	* @param EntityManagerInterface $entityManager
 	* @param postRepository $postRepository
+	* @param userPostsRepository $userPostsRepository
 	* @return JsonResponse
 	* @throws \Exception
-	* @Route("/posts", name="posts_add", methods={"POST"})
+	* @Route("/posts/{id}", name="posts_add", methods={"POST"})
 	*/
-	public function addPost(Request $request, EntityManagerInterface $entityManager, postRepository $postRepository){
+	public function addPost(
+		Request $request,
+		$id,
+		EntityManagerInterface $entityManager, 
+		postRepository $postRepository,
+		userPostsRepository $userPostsRepository
+	){
 		try{
 			$request = $this->transformJsonBody($request);
 			/*
@@ -118,12 +138,18 @@ class PostsController extends AbstractController
 			}
 			*/
 			
-			$post = new Post();
-			$post->setPrompt($request->get('prompt'));
-			$post->setDescription($request->get('description'));
-			$post->setImageURL($request->get('imageurl'));
-			$post->setTitle($request->get('title'));
-			$entityManager->persist($post);
+			$post = new Post(
+				$request->get('prompt'),
+				$request->get('description'),
+				$request->get('imageurl'),
+				$request->get('title')
+			);
+			$postRepository->save($post);
+			$userPosts = new UserPosts(
+				$post->getId(),
+				$id
+			);
+			$userPostsRepository->save($userPosts);
 			$entityManager->flush();
 
 			$data = ['message' => "POST_ADD_SUCCESS"];

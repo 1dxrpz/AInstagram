@@ -39,20 +39,19 @@ class UserPostsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return UserPosts[] Returns an array of UserPosts objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return UserPosts[] Returns an array of UserPosts objects
+    */
+   public function findByUserId($value): array
+   {
+       return $this->createQueryBuilder('u')
+           ->andWhere('u.UserID = :val')
+           ->setParameter('val', $value)
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?UserPosts
 //    {

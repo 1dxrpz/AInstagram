@@ -6,6 +6,10 @@
 	<div class="border wrapper">
 		<h1 class="text-center">Register</h1>
 			{{ form(form) }}
+		<p>Already registered? <a class="link-underline-dark link-opacity-50-hover link-offset-3" href="{{path('login')}}">Login</a></p>
+		{% for err in error %}
+	    	<li>{{ err }}</li>
+		{% endfor %}
 	</div>
 </div>
 <br>

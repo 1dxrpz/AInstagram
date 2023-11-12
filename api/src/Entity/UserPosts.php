@@ -8,6 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserPostsRepository::class)]
 class UserPosts
 {
+    public function __construct(
+        int $PostID, 
+        int $UserID
+    ) {
+        $this->setPostID($PostID);
+        $this->setUserID($UserID);
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

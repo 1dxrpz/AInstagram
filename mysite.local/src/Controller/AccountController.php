@@ -25,6 +25,9 @@ class AccountController extends AbstractController
     public function account(): Response
     {
         $user = $this->security->getUser();
+        if ($user == null) {
+            return $this->redirectToRoute('login');
+        }
         return $this->render('account/account.html.twig', [
             "name" => $user->getName(),
             "description" => $user->getDescription()

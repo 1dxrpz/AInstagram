@@ -68,15 +68,27 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-	for (var i = 0; i < 8; i++)
-	$.ajax({
-		url: `/partials/post/${i * 20 + 200}/${i * 10 + 100}`,
+(async () => {
+	var posts = await $.ajax({
+		url: `/partials/posts`,
 		method: 'get',
-		dataType: 'html',
-		success: (data) => {
-			var content_wrapper = document.querySelector(".content_wrapper");
-			content_wrapper.innerHTML += data;
-		}
+		contentType: "application/json",
+		dataType: "json"
+	});
+	posts.forEach(v => {
+		$.ajax({
+			url: `/partials/post/${v.id}`,
+			method: 'get',
+			dataType: "html",
+			success: (data) => {
+				var content_wrapper = document.querySelector(".content_wrapper");
+				content_wrapper.innerHTML += data;
+			},
+			error: (er) => {
+				console.log("er")
+			}
+		});
 	})
+})();
 </script>
 {% endblock %}

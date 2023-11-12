@@ -10,10 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
-class RegisterFormType extends AbstractType
+class LoginFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -21,19 +21,10 @@ class RegisterFormType extends AbstractType
             ->add('name', TextType::class, [
                 'required' => true,
                 'constraints' => [new Length(['min' => 3])],
-                'invalid_message' => 'test'
             ])
-            ->add('password', PasswordType::class, [
+            ->add('password', TextType::class, [
                 'required' => true,
-                'constraints' => [new NotBlank(), new Length(['min' => 3])],
-            ])
-            ->add('confirm_password', PasswordType::class, [
-                'required' => true,
-                'constraints' => [new NotBlank(), new Length(['min' => 3])],
-            ])
-            ->add('email', EmailType::class, [
-                'required' => true,
-                'invalid_message' => 'test'
+                'constraints' => [new Length(['min' => 3])]
             ])
             ->add('Submit', SubmitType::class)
         ;
