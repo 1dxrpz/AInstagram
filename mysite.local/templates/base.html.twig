@@ -36,9 +36,6 @@
                         <a class="nav-link" href="{{path('index')}}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{path('explore')}}">Explore</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{path('upload')}}">Upload</a>
                     </li>
                     <li class="nav-item">
@@ -57,6 +54,11 @@
                 {% endif %}
                 {% if app.user %}
                 <span class="navbar-text">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <button type="button" class="btn btn-primary btn-sm">
+                        <a href="{{path('admin')}}" class="text-reset link-underline link-underline-opacity-0">Admin</a>
+                    </button>
+                    {% endif %}
                     <button type="button" class="btn btn-primary btn-sm">
                         <a href="{{path('account')}}" class="text-reset link-underline link-underline-opacity-0">My account</a>
                     </button>

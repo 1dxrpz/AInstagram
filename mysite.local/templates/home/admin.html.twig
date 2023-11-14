@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %}AInstagram - home{% endblock %}
+
+{% block body %}
+<div class="container-xxl d-flex justify-content-center">
+	<div class="" style="margin-top: 50px">
+		<table class="table">
+			<thead>
+			  <tr>
+			    <th scope="col">id</th>
+			    <th scope="col">role</th>
+			    <th scope="col">name</th>
+				<th scope="col">description</th>
+				<th scope="col">email</th>
+			  </tr>
+			</thead>
+
+			<tbody>
+			{% for user in users %}
+				<tr>
+					<th>{{user.id}}</th>
+					<td>{{user.roles[0]}}</td>
+					<td>{{user.name}}</td>
+					<td>{{user.description}}</td>
+					<td>{{user.email}}</td>
+					<td>
+						<button type="button" class="btn btn-outline-primary btn-sm" onclick="RemoveUser({{user.id}})">
+							<a href="#" class="text-reset link-underline link-underline-opacity-0">Delete</a>
+						</button>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+<br>
+<br>
+<br>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+function RemoveUser(id) {
+	$.ajax({
+		url: `http://127.0.0.1:8001/api/users/${id}`,
+		method: 'delete',
+		dataType: "html",
+		success: (data) => {
+			console.log('deleted');
+			window.location.reload();
+		},
+		error: (er) => {
+			console.log(er);
+		}
+	});
+}
+</script>
+{% endblock %}

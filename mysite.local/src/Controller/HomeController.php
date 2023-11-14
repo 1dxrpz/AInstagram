@@ -32,6 +32,23 @@ class HomeController extends AbstractController
         return $this->render('home/explore.html.twig', []);
     }
     
+    #[Route('/admin', name: 'admin')]
+    public function admin(): Response
+    {
+        $user = $this->security->getUser();
+        if ($user == null) {
+            return $this->redirectToRoute('login');
+        }
+
+        $client = new \GuzzleHttp\Client();
+        $response = $client->get($this->getParameter('api.baseurl') . '/users');
+        $users = json_decode($response->getBody(), true);
+        
+        //return new JsonResponse($users);
+
+        return $this->render('home/admin.html.twig', ["users" => $users]);
+    }
+
     #[Route('/generate', name: 'generate')]
     public function generate(): Response
     {

@@ -101,10 +101,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles = array('ROLE_USER');
+        $client = new \GuzzleHttp\Client();
+        $response = $client->get('http://127.0.0.1:8001/api/users/' . $this->id);
 
-        return array_unique($roles);
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        return array_unique($data["roles"]);
     }
 
     public function setRoles(array $roles): self

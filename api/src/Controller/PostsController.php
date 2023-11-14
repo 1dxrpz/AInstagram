@@ -19,6 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 */
 class PostsController extends AbstractController
 {
+	private ?EntityManagerInterface $entityManager = null;
+
+	public function __construct(EntityManagerInterface $entityManager)
+	{
+        $this->entityManager = $entityManager;
+    }
+
 	/**
 	* @param userPostsRepository $userPostsRepository
 	* @param $id
@@ -87,6 +94,8 @@ class PostsController extends AbstractController
 			$post->setTitle($request->get('title'));
 			$entityManager->flush();
 
+			$this->createLog($post->getId(), "Post " . $post->getId() . " Updated");
+
 			$data = ['message' => "POST_UPDATE_SUCCESS"];
 			return $this->response($data, 200);
 		}catch (\Exception $e){
@@ -110,6 +119,9 @@ class PostsController extends AbstractController
 
 		$entityManager->remove($post);
 		$entityManager->flush();
+
+		$this->createLog($post->getId(), "Post " . $post->getId() . " Removed");
+
 		$data = ['message' => "POST_DELETE_SUCCESS"];
 		return $this->response($data, 200);
 	}
@@ -152,6 +164,8 @@ class PostsController extends AbstractController
 			$userPostsRepository->save($userPosts);
 			$entityManager->flush();
 
+			$this->createLog($post->getId(), "Post " . $post->getId() . " Created");
+
 			$data = ['message' => "POST_ADD_SUCCESS"];
 			return $this->response($data, 200);
 
@@ -160,10 +174,12 @@ class PostsController extends AbstractController
 			return $this->response($data, 422);
 		}
 	}
+
 	public function response($data, $status = 200, $headers = [])
 	{
 		return new JsonResponse($data, $status, $headers);
 	}
+
 	protected function transformJsonBody(\Symfony\Component\HttpFoundation\Request $request)
 	{
 		$data = json_decode($request->getContent(), true);
@@ -175,5 +191,15 @@ class PostsController extends AbstractController
 		$request->request->replace($data);
 
 		return $request;
+	}
+
+	private function createLog($id, $reason) {
+		$log = new Log(
+			$id,
+			new \DateTime(),
+			$reason
+		);
+		$this->entityManager->persist($log);
+		$this->entityManager->flush();
 	}
 }

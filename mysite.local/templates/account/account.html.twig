@@ -9,7 +9,15 @@
 		</div>
 	</div>
 	<div class="container-sm d-flex flex-wrap justify-content-center">
-		<h2 class="nickname">@{{name}}</h2>
+		
+		<h2 class="nickname">{{name}}</h2>
+		{% if role=="ROLE_USER" %}
+			<div title="User" class="role">👤</div>
+		{% endif %}
+		{% if role=="ROLE_ADMIN" %}
+			<div title="Admin" style="user-select: none; cursor: pointer;"></div>
+			<div title="User" class="role">⭐</div>
+		{% endif %}
 	</div>
 	<div class="container-sm d-flex flex-wrap justify-content-center">
 		<div class="description">{{description}}</div>
@@ -19,20 +27,20 @@
 <div class="container-sm d-flex flex-wrap justify-content-center">
 	<div class="content_wrapper d-flex flex-wrap justify-content-start" style="padding: 20px 0;">
 		<!-- CONTENT WRAPPER -->
+		{# {% for post in posts %}
+		<div class="card" style="width: 18rem;">
+			<img src="{{imageURL}}" class="card-img-top" alt="...">
+			<div class="card-body">
+				<h5 class="card-title">{{post.Title}}</h5>
+				<p class="card-text">{{post.Prompt}}</p>
+				<p class="card-text">{{post.Description}}</p>
+			</div>
+		</div>
+		{% endfor %} #}
 	</div>
 </div>
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-	for (var i = 0; i < 10; i++)
-	$.ajax({
-		url: `/partials/post/${i * 20 + 200}/${i * 10 + 100}`,
-		method: 'get',
-		dataType: 'html',
-		success: (data) => {
-			var content_wrapper = document.querySelector(".content_wrapper");
-			content_wrapper.innerHTML += data;
-		}
-	})
 </script>
 {% endblock %}

@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Log;
 use App\Repository\UserRepository;
+use App\Repository\LogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 */
 class UsersController extends AbstractController
 {
+	private ?EntityManagerInterface $entityManager = null;
+
+	public function __construct(EntityManagerInterface $entityManager)
+	{
+        $this->entityManager = $entityManager;
+    }
+
 	/**
 	* @param UserRepository $userRepository
 	* @return JsonResponse
@@ -32,7 +41,10 @@ class UsersController extends AbstractController
    * @return JsonResponse
    * @Route("/users/{id}", name="users_getbyid", methods={"GET"})
    */
-	public function getUsersById(UserRepository $userRepository, $id){
+	public function getUsersById(
+		UserRepository $userRepository,
+		$id
+	){
 		$user = $userRepository->find($id);
 
 		if (!$user){
@@ -49,7 +61,12 @@ class UsersController extends AbstractController
    * @return JsonResponse
    * @Route("/users/{id}", name="users_put", methods={"PUT"})
    */
-	public function updateUser(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, $id){
+	public function updateUser(
+		Request $request,
+		EntityManagerInterface $entityManager,
+		UserRepository $userRepository,
+		$id
+	){
 		try{
 			$user = $userRepository->find($id);
 
@@ -70,6 +87,8 @@ class UsersController extends AbstractController
 			$user->setAvatarID($request->get('avatarid'));
 			$entityManager->flush();
 
+			$this->createLog($user->getId(), "User Updated");
+
 			$data = ['message' => "POST_UPDATE_SUCCESS"];
 			return $this->response($data, 200);
 		}catch (\Exception $e){
@@ -79,11 +98,17 @@ class UsersController extends AbstractController
 	}
 	/**
    * @param UserRepository $userRepository
+   * @param LogRepository $logRepository
    * @param $id
    * @return JsonResponse
    * @Route("/users/{id}", name="user_delete", methods={"DELETE"})
    */
-	public function deleteUser(EntityManagerInterface $entityManager, UserRepository $userRepository, $id){
+	public function deleteUser(
+		EntityManagerInterface $entityManager,
+		UserRepository $userRepository,
+		LogRepository $logRepository,
+		$id
+	){
 		$user = $userRepository->find($id);
 
 		if (!$user){
@@ -91,8 +116,11 @@ class UsersController extends AbstractController
 			return $this->response($data, 404);
 		}
 
+		$this->createLog($user->getId(), "User Removed");
+
 		$entityManager->remove($user);
 		$entityManager->flush();
+
 		$data = ['message' => "USER_DELETE_SUCCESS"];
 		return $this->response($data, 200);
 	}
@@ -100,11 +128,17 @@ class UsersController extends AbstractController
 	* @param Request $request
 	* @param EntityManagerInterface $entityManager
 	* @param UserRepository $userRepository
+	* @param LogRepository $logRepository
 	* @return JsonResponse
 	* @throws \Exception
 	* @Route("/users", name="users_add", methods={"POST"})
 	*/
-	public function addUser(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository){
+	public function addUser(
+		Request $request,
+		EntityManagerInterface $entityManager,
+		LogRepository $logRepository,
+		UserRepository $userRepository
+	){
 		try{
 			$request = $this->transformJsonBody($request);
 
@@ -120,8 +154,14 @@ class UsersController extends AbstractController
 				$user->setPassword($request->get('password'));
 				$user->setEmail($request->get('email'));
 				$user->setAvatarID($request->get('avatarid'));
+				$roles[] = 'ROLE_USER';
+				$user->setRoles(array_unique($roles));
+
 				$entityManager->persist($user);
 				$entityManager->flush();
+
+				$this->createLog($user->getId(), "User Created");
+
 				$data = ['message' => "USER_ADD_SUCCESS"];
 				return $this->response($data, 200);
 			}
@@ -130,10 +170,12 @@ class UsersController extends AbstractController
 			return $this->response($data, 422);
 		}
 	}
+
 	public function response($data, $status = 200, $headers = [])
 	{
 		return new JsonResponse($data, $status, $headers);
 	}
+
 	protected function transformJsonBody(\Symfony\Component\HttpFoundation\Request $request)
 	{
 		$data = json_decode($request->getContent(), true);
@@ -145,5 +187,15 @@ class UsersController extends AbstractController
 		$request->request->replace($data);
 
 		return $request;
+	}
+
+	private function createLog($id, $reason) {
+		$log = new Log(
+			$id,
+			new \DateTime(),
+			$reason
+		);
+		$this->entityManager->persist($log);
+		$this->entityManager->flush();
 	}
 }
